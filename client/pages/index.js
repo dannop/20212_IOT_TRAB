@@ -5,12 +5,14 @@ import styles from '../styles/Home.module.css';
 import { LOCATIONS } from '../services/routes';
 
 export default function Home() {
-  const [locations, setLocations] = useState([]);
+  const [last_location, setLastLocation] = useState([]);
 
   useEffect(() => {
     (async () => {
       const locations = await LOCATIONS.getList();
-      if (locations) setLocations(locations);
+      if (locations) {
+        setLastLocation(locations[locations.length-1])
+      };
     })();
   }, []);
   
@@ -29,18 +31,14 @@ export default function Home() {
         </h1>
 
         <p className={styles.description}>
-          Localizações Salvas
+          Última localização
         </p>
 
-        {locations.map((location, index) => {
-          return (
-            <code key={index} className={styles.code}>Lat: {location.lat} Lng: {location.lng}</code>
-          );
-        })}   
+        <code className={styles.code}>Lat: {last_location.lat} Lng: {last_location.lng}</code>
         
         <div className={styles.grid}>
           <a href="locations" className={styles.card}>
-            <h2>Em lista &rarr;</h2>
+            <h2>Lista Completa &rarr;</h2>
             <p>Lista com todos os pontos salvos.</p>
           </a>
         </div>

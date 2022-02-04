@@ -32,9 +32,9 @@ export default function Locations() {
           Localizações Salvas
         </p>
 
-        {locations.map((location, index) => {
+        {locations.reverse().map((location, index) => {
           return (
-            <code key={index} className={styles.code}>Lat: {location.lat} Lng: {location.lng}</code>
+            <code key={index} className={styles.code}>{index}: Lat: {location.lat} Lng: {location.lng}</code>
           );
         })}   
       </main>
