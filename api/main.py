@@ -1,8 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi_mqtt import FastMQTT, MQTTConfig
-import haversine as hs
-from haversine import Unit
 
 mqtt_broker = 'broker.mqttdashboard.com'
 mqtt_port = 1883
@@ -56,13 +54,8 @@ def subscribe(client, mid, qos, properties):
 async def get_topic_data(client, topic, payload, qos, properties):
   print("data: ", topic, payload.decode(), qos, properties)
   text_file = open(FILE_NAME, "a+")
-  n = text_file.write(payload.decode()+"\n")
+  text_file.write(payload.decode()+"\n")
   text_file.close()
-  latlng = payload.decode().split(",")
-  loc1=(-22.9045472,-43.1310969)
-  loc2=(float(latlng[0]), float(latlng[1]))
-  distance = hs.haversine(loc1,loc2,unit=Unit.METERS)
-  print(distance)
 
   return 0
 

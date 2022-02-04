@@ -23,9 +23,10 @@ def createConnection():
             
             if ts%5 == 0:
                 sensor_data = str(message).split(",")
+                print(sensor_data)
                 
                 if len(sensor_data) > 5:
-                    print(sensor_data[2], sensor_data[3])
+                    # print(sensor_data[2], sensor_data[3])
                     msg = "{},{}".format(sensor_data[2],sensor_data[3])
                     publish.single(mqtt_topic, msg, hostname=mqtt_broker, port=mqtt_port)                
         
