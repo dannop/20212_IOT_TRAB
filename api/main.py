@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi_mqtt import FastMQTT, MQTTConfig
+import haversine as hs
+from haversine import Unit
 
 mqtt_broker = 'broker.mqttdashboard.com'
 mqtt_port = 1883
