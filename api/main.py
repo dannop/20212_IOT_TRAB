@@ -5,13 +5,13 @@ from haversine import Unit
 
 mqtt_broker = 'broker.mqttdashboard.com'
 mqtt_port = 1883
-mqtt_topic = "iot2022/estudante1"
+mqtt_topic = "iot2022/danno"
 
 FILE_NAME = "data.txt"
 
 app = FastAPI()
 
-fast_mqtt = FastMQTT(config=MQTTConfig(host = mqtt_broker, port= mqtt_port, keepalive = 60))
+fast_mqtt = FastMQTT(config=MQTTConfig(host=mqtt_broker, port=mqtt_port, keepalive = 60))
 
 fast_mqtt.init_app(app)
 
@@ -51,3 +51,21 @@ async def get_topic_data(client, topic, payload, qos, properties):
   print(distance)
 
   return 0
+
+@app.get("/positions")
+async def get_data():
+    mf = open(FILE_NAME, "r+")
+    file_content = mf.readlines()
+    # return file_content
+
+    ret_pos = []
+
+    for line in file_content:
+        aux = line.replace("\n","")
+        aux = aux.split(",")
+        ret_pos.append({
+            "lat": float(aux[0]),
+            "lng": float(aux[1]),
+        })
+
+    return ret_pos
