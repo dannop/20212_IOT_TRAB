@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi_mqtt import FastMQTT, MQTTConfig
 import haversine as hs
 from haversine import Unit
@@ -10,6 +11,19 @@ mqtt_topic = "iot2022/danno"
 FILE_NAME = "data.txt"
 
 app = FastAPI()
+
+origins = [
+  "http://localhost",
+  "http://localhost:3000",
+]
+
+app.add_middleware(
+  CORSMiddleware,
+  allow_origins=origins,
+  allow_credentials=True,
+  allow_methods=["*"],
+  allow_headers=["*"],
+)
 
 fast_mqtt = FastMQTT(config=MQTTConfig(host=mqtt_broker, port=mqtt_port, keepalive = 60))
 
@@ -52,20 +66,19 @@ async def get_topic_data(client, topic, payload, qos, properties):
 
   return 0
 
-@app.get("/positions")
+@app.get("/locations")
 async def get_data():
-    mf = open(FILE_NAME, "r+")
-    file_content = mf.readlines()
-    # return file_content
+  mf = open(FILE_NAME, "r+")
+  file_content = mf.readlines()
 
-    ret_pos = []
+  ret_pos = []
 
-    for line in file_content:
-        aux = line.replace("\n","")
-        aux = aux.split(",")
-        ret_pos.append({
-            "lat": float(aux[0]),
-            "lng": float(aux[1]),
-        })
+  for line in file_content:
+    aux = line.replace("\n","")
+    aux = aux.split(",")
+    ret_pos.append({
+      "lat": float(aux[0]),
+      "lng": float(aux[1]),
+    })
 
-    return ret_pos
+  return ret_pos
